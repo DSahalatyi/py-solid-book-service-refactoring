@@ -1,20 +1,20 @@
 from app.book import Book
-from app.display import BookDisplay
-from app.printer import BookPrinter
-from app.serializer import BookSerializer
+from app.display import ConsoleDisplay, ReverseDisplay
+from app.printer import ConsolePrinter, ReversePrinter
+from app.serializer import JsonSerializer, XmlSerializer
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     for cmd, method_type in commands:
         if cmd == "display":
-            BookDisplay.display(method_type, book=book)
+            display_strategy = ConsoleDisplay() if method_type == "console" else ReverseDisplay()
+            display_strategy.display(book.content)
         elif cmd == "print":
-            BookPrinter.print_book(method_type, book=book)
+            printer = ConsolePrinter() if method_type == "console" else ReversePrinter()
+            printer.print_book(book)
         elif cmd == "serialize":
-            return BookSerializer.serialize(
-                serialize_type=method_type,
-                book=book
-            )
+            serializer = JsonSerializer() if method_type == "json" else XmlSerializer()
+            return serializer.serialize(book)
 
 
 if __name__ == "__main__":

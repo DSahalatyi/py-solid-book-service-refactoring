@@ -1,7 +1,5 @@
 from abc import abstractmethod, ABC
 
-from app.book import Book
-
 
 class Display(ABC):
     @abstractmethod
